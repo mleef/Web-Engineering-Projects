@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+
+	
+	<head>
+		<title>3 Tabs</title>
+
+		<link href="stylesheets/3tabs.css" rel="stylesheet" type="text/css">
+		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+		<script src="javascripts/main.js"></script>
+
+
+
+	</head>
+
+
+	<body>
+
+		<header>
+			<h1>3 Tab Single Page Application</h1>
+		</header>
+
+		<main>
+
+			<div class ="tabs">
+				<button id="tab1"><span class="active">Dog Vote</span></button>
+				<button id="tab2"><span>Prime Checker</span></button>
+				<button id="tab3"><span>Canvas Demo</span></button>
+				<button id="tab4"><span>About Me</span></button>
+			</div>
+
+			<div class="tab1 triad" >
+				<link href="stylesheets/prime+vote.css" rel="stylesheet" type="text/css">
+				<h1>Fabulous Pet Name Recorder</h1>
+
+				<span id ="voting">Write a name for my dog: 
+					<input class="selector" type= "text">
+				<button class="submit">Submit</button> 
+				</span>
+
+				<h2>What I found: <output class="out"></output></h2>
+
+				<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    			<script src="javascripts/vote.js"></script>
+			</div>
+
+
+
+
+			<div class="tab2 hidden triad" >
+				<link href="stylesheets/prime+vote.css" rel="stylesheet" type="text/css">
+				<h1>Let me check that for you</h1>
+
+				<span id="prime">Type in a number and I'll check if it is prime: 
+					<input class="selector2" type= "text">
+					<button class="submit2">Submit</button> 
+				</span>
+
+				<h2>What I found: <output class="out2"></output></h2>
+
+				<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    			<script src="javascripts/prime.js"></script>
+			</div>
+
+			<div class="tab3 hidden triad" >
+				<canvas id="myCanvas" width="1200" height="750">
+				</canvas>
+				<script src="javascripts/canvas.js"></script>
+			</div>
+
+			<div class="tab4 hidden triad" >
+
+				<div class = "picture">
+					<img src="images/pic.jpg" alt="Picture of Marc Leef" height=200px width=200px>
+            		<p> My name is Marc Leef. I'm a junior  at the <br> University of Oregon studying Computer Science <br> and Biology. My hobbies include basketball, <br> tennis, and cheering on my Oregon Ducks! </p>
+          		</div>
+
+          		<div class = "links">
+          			<h3>More Info About Me:</h3>
+          			<ul>
+						<li> <a href="https://github.com/mleef">GitHub</a></li>
+						<li> <a href="https://linkedin.com/in/marcleef">LinkedIn</a></li>
+						<li> <a href="https://www.facebook.com/mleef">Facebook</a></li>
+					</ul>
+          		</div>
+
+          		<div class = "contact">
+          			<h3>Contact Info</h3>
+          			<ul>
+						<li>Phone: (503)750-1809</li>
+						<li>Email: mleef@uoregon.edu</li>
+					</ul>
+          		</div>
+
+			</div>
+
+
+
+
+		</main>
+
+	</body>
+
+
+
+
+
+</html>
+
+	
+
+

@@ -1,0 +1,8 @@
+.hidden {
+	display: none;
+}
+
+
+.tabs span.active {
+	background: #ddd;
+}
