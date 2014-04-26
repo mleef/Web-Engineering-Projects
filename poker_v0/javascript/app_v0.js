@@ -90,8 +90,10 @@ var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": nu
 
 function computeCounts(){
   the_deal.forEach( function (player){
-                          var ranks =                                       //e.g., ["two", "king", "nine", ...]
-                          var counts =
+                          var ranks = player.hand.map( function (card_obj) {
+                                             return card_obj.rank;});                                   //e.g., ["two", "king", "nine", ...]
+                          var counts = ranks.reduce( function (count_obj, rank) {
+                                                        if( rank in count_obj) count_obj[rank]++; else count_obj[rank] = 1;}, {});
                           player.counts = counts;                        //e.g., counts = {"two": 3, "five": 1, "jack": 1}
   });
 }
@@ -99,15 +101,23 @@ function computeCounts(){
 //e.g., rank_array = ["two", "king", "nine", ...]
 function largestRank( rank_array ){
       //return largest rank in array, e.g., "king"
+      return rank_array.reduce( function (high, cur){
+            if(rank_to_number[cur] > rank_to_number[high]) return cur; else return high;  
+      }, "two" );
 }
 
 function smallestRank( rank_array ){
-
+        return rank_array.reduce( function (low, cur){
+            if(rank_to_number[cur] < rank_to_number[low]) return cur; else return low;  
+      }, "ace" );
 }
 
 //e.g., counter_obj = {"two": 1, "ace": 3, "nine": 1}, k = 3 => ["ace"]. if k = 2 => []. k = 1 => ["two", "nine"]
 function exactlyK( counter_obj, k ){
 
+        return Object.keys(counter_obj).filter( function (rank) { 
+              return counter_obj[rank] == k;
+        });
   //return array of ranks that appear k times in hand
 
 }
@@ -116,37 +126,117 @@ function exactlyK( counter_obj, k ){
 function computeGroup( player ){
   var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
 
+  if(isStraightFlush(player)) {
+    return "straightflush";
+  }
+
+  else if(exactlyK(counts, 4).length == 1) {
+    return "4kind";
+  }
+
+  else if(isFullHouse(player)) {
+    return "fullhouse";
+  }
+
+  else if(isFlush(player)) {
+    return "flush";
+  }
+
+  else if(isStraight(player)) {
+    return "straight";
+  }
+
+  else if(exactlyK(counts, 3).length == 1) {
+    return "3kind";
+  }
+
+  else if(exactlyK(counts, 2).length == 2) {
+    return "2pair";
+  }
+
+  else if(exactlyK(counts, 2).length == 1) {
+    return "pair";
+  }
+
+  else if(exactlyK(counts, 1).length > 0) {
+    return "1kind";
+  }
+
+
   //return 4kind, 3kind, 2pair, pair, 1kind as appropriate (always highest possible)
 
 }
 
 function isFullHouse( player ){
   var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
-
+  return exactlyK(player,3).length == 1 && exactlyK(player, 2) == 1;
   //return true if player holds full-house
 }
 
 function isStraight( player ){
     var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
-
+    return largestRank(Object.keys(counts)) - smallestRank(Object.keys(counts)) == 4;
     //return true for both normal straight and special ace-low straight
 }
 
 function isFlush( player ){
     //return true if all suits the same
+    var suits = player.hand.map( function (card_obj) {
+                                             return card_obj.suit;});
+    var first = suits[0];
+    return ranks.every( function(suit) {
+          return suit == first;
+    });            
 }
 
 function isStraightFlush( player ){
+
+    return isFlush(player) && isStraight(player);
     //do the obvious
 }
 
 
 function computeValues(){
+  the_deal.forEach( function (player){
+    player.value = computeGroup(player);
+  })
 
     //for each player, compute value of hand and then fill in player.value
 }
 
 function computePlaces(){
+
+  values = [];
+
+  the_deal.forEach( function (player){
+    values[poker_hands[player.value]] = player.person;
+  })
+
+  values = values.sort;
+
+  var first = values[0];
+  var second = values[1];
+  var third = values[2];
+
+  the_deal.forEach( function (player){
+    if(player.person == first) {
+      player.place = 1;
+    }
+
+    else if(player.person == second) {
+      player.place = 2;
+    }
+
+    else if(player.person == third) {
+      player.place = 3;
+    }
+    
+  })
+
+
+
+
+
 
   //use values of players' hands to figure out their placement (1,2,3)
   //Tricky part is ties on hand value, e.g., slim and pete both have 1kind.

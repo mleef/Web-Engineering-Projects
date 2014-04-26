@@ -5,6 +5,9 @@ var divisor = 0;
 var isPrime = function (num) {
 
     var prime = true;
+    if(num == 1) {
+        return prime;
+    }
     if(num < 2 || num != Math.round(num)) {
         return false
     }

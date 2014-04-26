@@ -3,9 +3,11 @@ var divisor = 0;
  
 //function that performs the prime check
 var isPrime = function (num) {
-
     var prime = true;
-    if(num < 2 || num != Math.round(num)) {
+    if(num == 1) {
+        return prime;
+    }
+     if(num < 2 || num != Math.round(num)) {
         return false
     }
     for (var i = 2; i <= Math.sqrt(num); i++) {

@@ -99,57 +99,56 @@
 			$("button#add-card-btn").click(function(event){
 				// get the selected person, suit, and rank
 				var person = $("#person-radio-btn label.active input").val();
-				console.log(person);
 				var suit = $("#suit-radio-btn label.active input").val();
-				console.log(suit);
 				var rank = $("#rank-select").val();
-				console.log(rank);
 
 				// add the selected card to the selected person's hand
-				$('my-person-container#' + person).append(...)
+				$(".my-person-container #" + person).append("<div class='card'> <span id = 'rank'>" + rank + " of " + "</span><span id = 'suit'>" + suit.toLowerCase() + "</span></div>");
 			});
 
 			$("button.reset_btn").click(function(event){
-				console.log('RESET');
+				var person = event.target.id.replace("_reset","");
+				console.log(person);
+				$(".my-person-container #" + person + " .card").remove();
 
 			});
 
-			$("button#winner").click(function(event){
-				console.log('WINNER');
-                //the_deal = [ {person: slim, hand: slim_hand, counts: null, value: null, place: null }, etc. ]
-                the_deal.forEach(
-                    function( player ){
-                       var name = player.person.handle;
-                       var $all_cards = $(...);
-                       console.log ( $all_cards );
+			// $("button#winner").click(function(event){
+			// 	console.log('WINNER');
+   //              //the_deal = [ {person: slim, hand: slim_hand, counts: null, value: null, place: null }, etc. ]
+   //              the_deal.forEach(
+   //                  function( player ){
+   //                     var name = player.person.handle;
+   //                     var $all_cards = $(...);
+   //                     console.log ( $all_cards );
 
-                       //$hand = [{rank: "two", suit: "clubs"}, {...}. etc.] - an array of five card objects
-                       var $hand = $all_cards.map(
-                                                  function (i, card){         //jquery map has args reversed - sigh
-                                                       var $card = $(card);   //jquery map unwraps arg - need to wrap it again
-                                                       var obj = {};
-                                                       obj.rank = ...;
-                                                       obj.suit = ...;
-                                                       return obj;
-                                                  });
-                       player.hand = $.makeArray( $hand );    //now have simple array
-                    });  //end forEach
+   //                     //$hand = [{rank: "two", suit: "clubs"}, {...}. etc.] - an array of five card objects
+   //                     var $hand = $all_cards.map(
+   //                                                function (i, card){         //jquery map has args reversed - sigh
+   //                                                     var $card = $(card);   //jquery map unwraps arg - need to wrap it again
+   //                                                     var obj = {};
+   //                                                     obj.rank = ...;
+   //                                                     obj.suit = ...;
+   //                                                     return obj;
+   //                                                });
+   //                     player.hand = $.makeArray( $hand );    //now have simple array
+   //                  });  //end forEach
 
-                //compute value of each hand and its place (first, second, third)
+   //              //compute value of each hand and its place (first, second, third)
 
-                //Put the hand value into each player's result div and place in rank div
-                the_deal.forEach(
-                    function( player ){
-                       var name = player.person.handle;
-                       var $result = $(...);   //find the result div to place value in
-                       $result.text( "" );                        //clear it for the heck of it
-                       $result.text( player.value );              //put the hand value in
+   //              //Put the hand value into each player's result div and place in rank div
+   //              the_deal.forEach(
+   //                  function( player ){
+   //                     var name = player.person.handle;
+   //                     var $result = $(...);   //find the result div to place value in
+   //                     $result.text( "" );                        //clear it for the heck of it
+   //                     $result.text( player.value );              //put the hand value in
 
-                       var $place = $(...);     //find the rank div to place value in
-                       $place.text( "" );                        //clear it for the heck of it
-                       $place.text( player.place );              //put the player's place in
-                    });
-            });
+   //                     var $place = $(...);     //find the rank div to place value in
+   //                     $place.text( "" );                        //clear it for the heck of it
+   //                     $place.text( player.place );              //put the player's place in
+   //                  });
+   //          });
         }
 
 
@@ -229,12 +228,6 @@
 	    	<div class="my-person-container">
 	    		<div>SLIM:</div>
 	    		<div id="slim" class="my-card-container">
-
-	    			<div class="card">
-	    				<span id = "rank"></span>
-	    				<span id = "suit"></span>
-
-	    			</div>
 
                    <!-- spans added and removed programmatically -->
 
