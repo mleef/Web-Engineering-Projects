@@ -12,7 +12,7 @@ var main = function () {
     $("button.submit").on("click", function (event) {
         //get input, remove spaces
         var location = $(".selector").val().replace(/\s/g, '');
-        var url = "http://api.openweathermap.org/data/2.5/weather?q=" + location +"&callback=?";
+        var url = "http://api.openweathermap.org/data/2.5/weather?q=" + location;
         var city = 0;
         var temp = 0;
         var humidity = 0;
@@ -43,7 +43,7 @@ var main = function () {
         if(event.keyCode == 13) {
         //get input, remove spaces
         var location = $(".selector").val().replace(/\s/g, '');
-        var url = "http://api.openweathermap.org/data/2.5/weather?q=" + location +"&callback=?";
+        var url = "http://api.openweathermap.org/data/2.5/weather?q=" + location;
         var city = 0;
         var temp = 0;
         var humidity = 0;
@@ -65,10 +65,10 @@ var main = function () {
             $(".out4").val(clouds + " %");
             $(".out5").val(city);
             $(".selector").val("");
-    });
+    })};
             
             
-    }})
+    })
 }
 
 

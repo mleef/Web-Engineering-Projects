@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+
+  <head>
+
+      <style>
+
+          .directions {
+                        font-size: x-large;
+                        color: red
+                      }
+
+      </style>
+
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+      <script>
+
+        function showResult( response_body ) {
+          $(".answer").text( response_body.message );
+          $(".selector").val("");
+        }
+
+
+        var main = function (){
+
+              $("button.submit").on("click", function (event){
+                  //$.getJSON( "voter", {"target": $(".selector").val()},  showResult)})
+                    $.post("voter", {"target": $(".selector").val()},  showResult)})
+
+              $(".selector").on("keypress", function (event){
+                  if( event.keyCode == 13){ $.post("voter", {"target": $(".selector").val()},  showResult)}})
+
+          }
+
+          $(document).ready(main);
+      </script>
+  </head>
+
+  <body>
+
+    <h1>Fabulous Pet Name Recorder</h1>
+
+     <section class="name-input">
+        <span class="directions">Write a name for my dog: </span>
+        <input class="selector" type= "text">
+        <button class="submit">Submit</button>
+    </section>
+
+    <section class="result">
+        <h2>What I found: <span class=answer></span></h2>
+    </section>
+
+  </body>
+</html>
