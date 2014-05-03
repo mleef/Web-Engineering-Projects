@@ -173,6 +173,8 @@
         var temp = Object.keys(counts);
         temp.splice(ind, 1);
         if(rank_to_number[largestRank(temp)] - rank_to_number[smallestRank(temp)] == 3 && exactlyK(counts, 1).length == 5) {
+          console.log("STRAIGHT");
+          console.log(exactlyK(counts, 1));
           return true;
         } 
         return false;
@@ -211,17 +213,34 @@
       player.value = computeGroup(player);
     })
 
+    console.log(the_deal);
       //for each player, compute value of hand and then fill in player.value
   }
 
   function computePlaces(){
 
-    values = [];
-    var tie = new Boolean(); 
+    var values = [];
+    var tie = new Boolean();
+    var resultList = [];
     tie = false; 
+    var p1;
+    var p2;
+    var p3;
+
+    var count = 0;
 
     the_deal.forEach( function (player){
       values.push({"name" : player.person.handle, "value" : poker_hands[player.value]});
+      if(count == 0) {
+        p1 = {"name" : player.person.handle, "hand" : player.counts, "value" : poker_hands[player.value] };
+      }
+      else if(count == 1) {
+        p2 = {"name" : player.person.handle, "hand" : player.counts, "value" : poker_hands[player.value] };
+      }
+      else {
+        p3 = {"name" : player.person.handle, "hand" : player.counts, "value" : poker_hands[player.value] };
+      }
+      count += 1;
     })
 
     values.sort(function(a, b){
@@ -232,166 +251,275 @@
     var second = values.pop();
     var third = values.pop();
 
-    if(first.value == second.value) {
-      kickerSequence(first.name, second.name, third, first.value)
+    if(first.value == second.value || first.value == third.value || second.value == third.value) {
       tie = true;
     }
 
-    else if(first.value == third.value) {
-      kickerSequence(first.name, third.name, second, first.value)
-      tie = true;
-    }
+    tieList = {"names" : [], "place" : 0};
 
-    else if(second.value == third.value) {
-      kickerSequence(second.name, third.name, first, second.value)
-      tie = true;
-    }
-
-    // console.log("First: " + first.name);
-    // console.log("Second: " + second.name);
-    // console.log("Third: " + third.name);
-
-
-    if(!tie) {
-      the_deal.forEach( function (player){
-        if(player.person.handle == first.name) {
-          player.place = 1;
+    if(tie) {
+      var winner = kickerSequence(p1, p2);
+      if(winner == "tie") {
+        var winner2 = kickerSequence(p1, p3);
+        console.log("p1 name: " + p1.name);
+        console.log("p3 name: " + p3.name);
+        console.log("winner2 name: " + winner2);
+        if(winner2.name == p1.name) {
+          first.name = p1.name;
+          second.name = p2.name;
+          tieList.names[p1.name] = 1;
+          tieList.names[p2.name] = 1;
+          tieList.place = 1;
         }
-
-        else if(player.person.handle == second.name) {
-          player.place = 2;
+        else if(winner2.name == p3.name) {
+          first.name = p3.name;
+          second.name = p1.name;
+          tieList.names[p3.name] = 1;
+          tieList.names[p1.name] = 1;
+          tieList.place = 2;
         }
 
         else {
-          player.place = 3;
+          tieList.names[p1.name] = 1;
+          tieList.names[p2.name] = 1;
+          tieList.names[p3.name] = 1;
+          tieList.place = 1;
         }
-      })
-  }
+      }
 
-  console.log(the_deal);
+      else {
+
+        var winner2 = kickerSequence(winner, p3);
+        if(winner2 == "tie") {
+          console.log("p2 name: " + p1.name);
+          console.log("p3 name: " + p3.name);
+          console.log("winner name: " + winner.name);
+          if(winner.name == p1.name) {
+            first.name = winner.name;
+            second.name = p3.name;
+            tieList.names[winner.name] = 1;
+            tieList.names[p3.name] = 1;
+            tieList.place = 1;
+          }
+          else if(winner.name == p2.name) {
+            first.name = p2.name;
+            second.name = p3.name;
+            tieList.names[p2.name] = 1;
+            tieList.names[p3.name] = 1;
+            tieList.place = 1;
+          }
+
+          else {
+            tieList.names[p1.name] = 1;
+            tieList.names[p2.name] = 1;
+            tieList.names[p3.name] = 1;
+            tieList.place = 1;
+          }
+        }
+        else { 
+          if(winner.name == winner2.name) {
+            first.name = winner.name;
+            if(winner.name == p1.name) {
+              winner2 = kickerSequence(p2, p3);
+              second.name = winner2.name
+            }
+            else {
+              winner2 = kickerSequence(p1, p3);
+              second.name = winner2.name;
+            }
+          }
+
+          else {
+            first.name = p3.name;
+            second.name = winner.name;
+          }
+        }
+    }
+
+    }
+
+    setPlaces(first.name, second.name, third.name , tieList.names, tieList.place);
+  
+
 
     //use values of players' hands to figure out their placement (1,2,3)
     //Tricky part is ties on hand value, e.g., slim and pete both have 1kind.
     //Then have to invoke tie-breaker rules (see top of file). Challenging problem!
     }
 
-  function kickerSequence( tie1, tie2, third , tieScore ){
+  function kickerSequence(p1, p2){
 
-    var tHand1;
-    var tHand2;
-
-    var tieVal = tieScore;
-    var thirdName = third.name;
-    var thirdVal = third.value; 
-
-    var first;
-    var second;
-    var third;
-
-    the_deal.forEach( function(player) {
-      if(player.person.handle == tie1) {
-        tHand1 = player.counts;
-        type = player.value; 
-      }
-      else if(player.person.handle == tie2) {
-        tHand2 = player.counts;
-        type = player.value;
-      }
-
-    })
-
-    if(type == "1kind") {
-      console.log("BREAKING TIE 1KIND");
-      h1 = exactlyK(tHand1, 1);
-      h2 = exactlyK(tHand2, 1);
-
-      if(rank_to_number[largestRank(h1)] > rank_to_number[largestRank(h2)]) {
-          winner = tie1;
-          loser = tie2;
-      }
-
-      else if(rank_to_number[largestRank(h1)] < rank_to_number[largestRank(h2)]) {
-          winner = tie2;
-          loser = tie1;
-      }
-
-      for(var i = 0; i < h1.length; i++) {
-        if(rank_to_number[h1[i]] > rank_to_number[h2[i]]) {
-          winner = tie1; 
-          loser = tie2;
-        }
-        else {
-          winner = tie2;
-          loser = tie1;
-        }
-      }
-
-      if(tieVal > thirdVal) {
-        first = winner;
-        second = loser;
-        third = thirdName;
-      }
-
-      else {
-        first = thirdName;
-        second = winner;
-        third = loser;
-      }
-      
-
+    if(p1.value > p2.value) {
+      return p1;
+    }
+    else if(p1.value < p2.value) {
+      return p2;
     }
 
-    if(type == "pair") {
+    else {
 
-      console.log("BREAKING TIE PAIR");
+      switch(p1.value) {
 
-      var h1;
-      var h2;
-      var winner;
-      var loser;
-
-      h1 = exactlyK(tHand1, 2);
-      h2 = exactlyK(tHand2, 2);
-
-      if(rank_to_number[h1[0]] > rank_to_number[h2[0]]) {
-        winner = tie1;
-        loser = tie2;
-      }
-
-      else if(rank_to_number[h1[0]] < rank_to_number[h2[0]]) {
-        winner = tie2;
-        loser = tie1;
-      }
-
-      else {
-
-
-        h1 = exactlyK(tHand1, 1);
-        h2 = exactlyK(tHand2, 1);
-
-        for(var i = 0; i < h1.length; i++) {
-          if(rank_to_number[h1[i]] > rank_to_number[h2[i]]) {
-            winner = tie1; 
-            loser = tie2;
+        case 1:
+          console.log("1kind tie");
+          if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p1;
+          }
+          else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p2;
           }
           else {
-            winner = tie2;
-            loser = tie1;
+            return "tie";
           }
+          break;
+
+
+        case 2:
+          console.log("pair tie");
+          if(rank_to_number[exactlyK(p1.hand, 2)[0]] > rank_to_number[exactlyK(p2.hand, 2)[0]]) {
+              return p1;
+            }
+          else if(rank_to_number[exactlyK(p1.hand, 2)[0]] < rank_to_number[exactlyK(p2.hand, 2)[0]]) {
+              return p2;
+            }
+
+          else if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+              return p1;
+          }
+
+          else if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+              return p2;
+          }
+          else {
+            return "tie";
+          }
+          break;
+
+        case 3:
+          console.log("2pair tie");
+          var h1 = Math.max(rank_to_number[exactlyK(p1.hand, 2)[0]], rank_to_number[exactlyK(p1.hand, 2)[1]]);
+          var h2 = Math.max(rank_to_number[exactlyK(p2.hand, 2)[0]], rank_to_number[exactlyK(p2.hand, 2)[1]]);
+
+          if(h1 > h2) {
+            return p1;
+          }
+          else if(h1 < h2) {
+            return p2;
+          }
+          else {
+            if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+              return p1;
+            }
+
+            else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+              return p2;
+            }
+
+            return "tie";
+          }
+
+          break;
+
+        case 4:
+          console.log("3kind tie");
+          if(rank_to_number[exactlyK(p1.hand, 3)[0]] > rank_to_number[exactlyK(p2.hand, 3)[0]]) {
+              return p1;
+            }
+          else if(rank_to_number[exactlyK(p1.hand, 3)[0]] < rank_to_number[exactlyK(p2.hand, 3)[0]]) {
+              return p2;
+            }
+
+          else if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+              return p1;
+          }
+
+          else if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+              return p2;
+          }
+          else {
+            return "tie";
+          }
+          break;
+
+        case 5:
+          console.log("straight tie");
+          if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p1;
+          }
+          else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p2;
+          }
+          else {
+            return "tie";
+          }
+          break;
+
+        case 6:
+          console.log("flush tie");
+          if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p1;
+          }
+          else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p2;
+          }
+          else {
+            return "tie";
+          }
+          break;
+
+        case 7:
+          console.log("full house tie");
+          if(rank_to_number[exactlyK(p1.hand, 3)[0]] > rank_to_number[exactlyK(p2.hand, 3)[0]]) {
+              return p1;
+          }
+          else if(rank_to_number[exactlyK(p1.hand, 3)[0]] < rank_to_number[exactlyK(p2.hand, 3)[0]]) {
+              return p2;
+          }
+          else if(rank_to_number[exactlyK(p1.hand, 2)[0]] > rank_to_number[exactlyK(p2.hand, 2)[0]]) {
+              return p1;
+          }
+          else if(rank_to_number[exactlyK(p1.hand, 2)[0]] < rank_to_number[exactlyK(p2.hand, 2)[0]]) {
+              return p2;
+          }
+          else {
+              return "tie";
+          }
+          break;
+
+        case 8:
+          console.log("4kind tie");
+          if(rank_to_number[exactlyK(p1.hand, 4)[0]] > rank_to_number[exactlyK(p2.hand, 4)[0]]) {
+              return p1;
+          }
+          else if(rank_to_number[exactlyK(p1.hand, 4)[0]] < rank_to_number[exactlyK(p2.hand, 4)[0]]) {
+              return p2;
+          }
+          else if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p1;
+          }
+          else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p2;
+          }
+          else {
+            return "tie";
+          }
+          break;
+
+        case 9:
+          console.log("straight flush tie");
+          if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p1;
+          }
+          else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
+            return p2;
+          }
+          else {
+            return "tie";
+          }
+          break;
+
         }
-      }
 
-      if(tieVal > thirdVal) {
-        first = winner;
-        second = loser;
-        third = thirdName;
-      }
-
-      else {
-        first = thirdName;
-        second = winner;
-        third = loser;
-      }
 
     }
 
@@ -401,26 +529,57 @@
 
 
 
-
-    the_deal.forEach( function (player){
-        if(player.person.handle == first) {
-          player.place = 1;
-        }
-
-        else if(player.person.handle == second) {
-          player.place = 2;
-        }
-
-        else {
-          player.place = 3;
-        }
-      })
-
-
-    alert("There was a tie involved, unfortunately the tie breaker is not working perfectly yet :(");
 
 
 
   }
+
+  function setPlaces(first, second, third, list, place) {
+
+      if(place != 0) {
+        console.log("got here");
+        the_deal.forEach( function (player){
+          if(list[player.person.handle]) {
+            console.log(player.person.handle + " was a part of a tie");
+            player.place = place;
+          }
+
+          else {
+            if(place == 1) {
+              console.log(player.person.handle + " was not a part of a tie");
+              player.place = 2;
+            }
+            else {
+              console.log(player.person.handle + " was not a part of a tie");
+              player.place = 1;
+            }
+          }
+
+        })
+
+
+      }
+      else {
+        the_deal.forEach( function (player){
+          if(player.person.handle == first) {
+            player.place = 1;
+          }
+
+          else if(player.person.handle == second) {
+            player.place = 2;
+          }
+
+          else {
+            player.place = 3;
+          }
+        })
+      }
+
+
+
+
+  }
+
+
 
 

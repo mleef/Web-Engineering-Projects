@@ -13,7 +13,6 @@ app.use(connect.urlencoded());
 // set up our routes
 app.post("/voter", 
 	function (req, res) { 
-		console.log( req );
 		var my_object = req.body;	//{target: 111}
 		var the_response = v.addVote(my_object.target);
 		res.json( the_response );
