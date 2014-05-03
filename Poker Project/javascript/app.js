@@ -210,8 +210,6 @@
     the_deal.forEach( function (player){
       player.value = computeGroup(player);
     })
-
-    console.log(the_deal);
       //for each player, compute value of hand and then fill in player.value
   }
 
@@ -254,12 +252,16 @@
     }
 
     tieList = {"names" : [], "place" : 0};
-
+    console.log(p1.name);
+    console.log(p2.name);
+    console.log(p3.name);
     if(tie) {
+      console.log("TIE SITUATION");
       var winner = kickerSequence(p1, p2);
       if(winner == "tie") {
         var winner2 = kickerSequence(p1, p3);
         if(winner2.name == p1.name) {
+          console.log("1");
           first.name = p1.name;
           second.name = p2.name;
           tieList.names[p1.name] = 1;
@@ -267,14 +269,16 @@
           tieList.place = 1;
         }
         else if(winner2.name == p3.name) {
+          console.log("2");
           first.name = p3.name;
           second.name = p1.name;
-          tieList.names[p3.name] = 1;
+          tieList.names[p2.name] = 1;
           tieList.names[p1.name] = 1;
           tieList.place = 2;
         }
 
         else {
+          console.log("3");
           tieList.names[p1.name] = 1;
           tieList.names[p2.name] = 1;
           tieList.names[p3.name] = 1;
@@ -283,10 +287,10 @@
       }
 
       else {
-
         var winner2 = kickerSequence(winner, p3);
         if(winner2 == "tie") {
           if(winner.name == p1.name) {
+            console.log("4");
             first.name = winner.name;
             second.name = p3.name;
             tieList.names[winner.name] = 1;
@@ -294,6 +298,7 @@
             tieList.place = 1;
           }
           else if(winner.name == p2.name) {
+            console.log("5");
             first.name = p2.name;
             second.name = p3.name;
             tieList.names[p2.name] = 1;
@@ -302,34 +307,86 @@
           }
 
           else {
+            console.log("6");
             tieList.names[p1.name] = 1;
             tieList.names[p2.name] = 1;
             tieList.names[p3.name] = 1;
             tieList.place = 1;
           }
         }
-        else { 
+
+        else {
+          console.log(winner);
+          console.log(winner2);
           if(winner.name == winner2.name) {
             first.name = winner.name;
             if(winner.name == p1.name) {
+              console.log("7");
               winner2 = kickerSequence(p2, p3);
-              second.name = winner2.name
+              if(winner2 == "tie") {  
+                tieList.names[p2.name] = 1;
+                tieList.names[p3.name] = 1;
+                tieList.place = 2;
+              }
+              else {
+                second.name = winner2.name
+              }
+              
             }
             else {
+              console.log("8");
               winner2 = kickerSequence(p1, p3);
-              second.name = winner2.name;
+              if(winner2 == "tie") {
+                tieList.names[p1.name] = 1;
+                tieList.names[p3.name] = 1;
+                tieList.place = 2;
+              }
+              else {
+                second.name = winner2.name;
+              }
+              
             }
-          }
+        }
 
           else {
+            console.log("9");
             first.name = p3.name;
             second.name = winner.name;
-          }
+          } 
         }
+
+      }
     }
 
+
+    else { 
+      var winner = kickerSequence(p1, p2);
+      var winner2 = kickerSequence(winner, p3);
+      if(winner.name == winner2.name) {
+        first.name = winner.name;
+        if(winner.name == p1.name) {
+          winner2 = kickerSequence(p2, p3);
+          second.name = winner2.name
+          console.log("10");
+        }
+        else {
+          winner2 = kickerSequence(p1, p3);
+          second.name = winner2.name;
+          console.log("11");
+        }
+      }
+
+      else {
+        first.name = p3.name;
+        second.name = winner.name;
+        console.log("12");
+      }
     }
 
+    console.log("First: " + first.name);
+    console.log("Second: " + second.name);
+    console.log(tieList.names);
+    console.log(tieList.place);
     setPlaces(first.name, second.name, third.name , tieList.names, tieList.place);
   
 
@@ -338,6 +395,7 @@
     //Tricky part is ties on hand value, e.g., slim and pete both have 1kind.
     //Then have to invoke tie-breaker rules (see top of file). Challenging problem!
     }
+
 
   function kickerSequence(p1, p2){
 
