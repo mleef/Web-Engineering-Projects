@@ -5,11 +5,11 @@ var voteList = new Array();
 var addVote = function (name) {
   if(!voteList[name]) {
     voteList[name] = 1;
-    return {"message" : "The name "+ name + " now has 1 vote."};
+    return {"message" : "The name "+ name + " now has 1 vote.", "name" : name, "vote" : 1};
   }
   else {
     voteList[name] = voteList[name] + 1;
-    return {"message" : "The name "+ name + " now has " + voteList[name] + " votes."};
+    return {"message" : "The name "+ name + " now has " + voteList[name] + " votes.", "name" : name, "vote" : voteList[name]};
   }
 }
 

@@ -173,8 +173,6 @@
         var temp = Object.keys(counts);
         temp.splice(ind, 1);
         if(rank_to_number[largestRank(temp)] - rank_to_number[smallestRank(temp)] == 3 && exactlyK(counts, 1).length == 5) {
-          console.log("STRAIGHT");
-          console.log(exactlyK(counts, 1));
           return true;
         } 
         return false;
@@ -261,9 +259,6 @@
       var winner = kickerSequence(p1, p2);
       if(winner == "tie") {
         var winner2 = kickerSequence(p1, p3);
-        console.log("p1 name: " + p1.name);
-        console.log("p3 name: " + p3.name);
-        console.log("winner2 name: " + winner2);
         if(winner2.name == p1.name) {
           first.name = p1.name;
           second.name = p2.name;
@@ -291,9 +286,6 @@
 
         var winner2 = kickerSequence(winner, p3);
         if(winner2 == "tie") {
-          console.log("p2 name: " + p1.name);
-          console.log("p3 name: " + p3.name);
-          console.log("winner name: " + winner.name);
           if(winner.name == p1.name) {
             first.name = winner.name;
             second.name = p3.name;
@@ -362,15 +354,7 @@
 
         case 1:
           console.log("1kind tie");
-          if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-            return p1;
-          }
-          else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-            return p2;
-          }
-          else {
-            return "tie";
-          }
+          return kick(p1, p2);
           break;
 
 
@@ -382,17 +366,7 @@
           else if(rank_to_number[exactlyK(p1.hand, 2)[0]] < rank_to_number[exactlyK(p2.hand, 2)[0]]) {
               return p2;
             }
-
-          else if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-              return p1;
-          }
-
-          else if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-              return p2;
-          }
-          else {
-            return "tie";
-          }
+          return kick(p1, p2);
           break;
 
         case 3:
@@ -428,43 +402,17 @@
           else if(rank_to_number[exactlyK(p1.hand, 3)[0]] < rank_to_number[exactlyK(p2.hand, 3)[0]]) {
               return p2;
             }
-
-          else if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-              return p1;
-          }
-
-          else if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-              return p2;
-          }
-          else {
-            return "tie";
-          }
+          return kick(p1, p2);
           break;
 
         case 5:
           console.log("straight tie");
-          if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-            return p1;
-          }
-          else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-            return p2;
-          }
-          else {
-            return "tie";
-          }
+          return kick(p1, p2);
           break;
 
         case 6:
           console.log("flush tie");
-          if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-            return p1;
-          }
-          else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-            return p2;
-          }
-          else {
-            return "tie";
-          }
+          return kick(p1, p2);
           break;
 
         case 7:
@@ -507,15 +455,7 @@
 
         case 9:
           console.log("straight flush tie");
-          if(rank_to_number[largestRank(exactlyK(p1.hand, 1))] > rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-            return p1;
-          }
-          else if (rank_to_number[largestRank(exactlyK(p1.hand, 1))] < rank_to_number[largestRank(exactlyK(p2.hand, 1))]) {
-            return p2;
-          }
-          else {
-            return "tie";
-          }
+          return kick(p1, p2);
           break;
 
         }
@@ -534,23 +474,51 @@
 
   }
 
+
+  function kick(p1, p2) {
+
+    var a = exactlyK(p1.hand, 1);
+    var b = exactlyK(p2.hand, 1);
+    var running = true;
+    var ind1, ind2;
+    var l1, l2;
+    while(a.length > 0 && b.length > 0) {
+      l1 = largestRank(a);
+      l2 = largestRank(b);
+
+      ind1 = a.indexOf(l1);
+      ind2 = b.indexOf(l2);
+
+      if(rank_to_number[l1] > rank_to_number[l2]) {
+        return p1;
+      }
+
+      if(rank_to_number[l1] < rank_to_number[l2]) {
+        return p2;
+      }
+
+      a.splice(ind1, 1);
+      b.splice(ind2, 1)
+
+    } 
+    return "tie";
+
+
+  }
+
   function setPlaces(first, second, third, list, place) {
 
       if(place != 0) {
-        console.log("got here");
         the_deal.forEach( function (player){
           if(list[player.person.handle]) {
-            console.log(player.person.handle + " was a part of a tie");
             player.place = place;
           }
 
           else {
             if(place == 1) {
-              console.log(player.person.handle + " was not a part of a tie");
               player.place = 2;
             }
             else {
-              console.log(player.person.handle + " was not a part of a tie");
               player.place = 1;
             }
           }

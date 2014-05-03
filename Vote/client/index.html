@@ -15,14 +15,20 @@
       <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
       <script>
+        clientSideList = [];
+
 
         function showResult( response_body ) {
+          clientSideList[response_body.name] = response_body.vote;
+          console.log("Client Side Vote Storage:");
+          console.log(clientSideList);
           $(".answer").text( response_body.message );
           $(".selector").val("");
         }
 
 
         var main = function (){
+
 
               $("button.submit").on("click", function (event){
                   //$.getJSON( "voter", {"target": $(".selector").val()},  showResult)})
