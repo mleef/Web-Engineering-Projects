@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+
+  <head>
+
+      <style>
+
+          .directions {
+                        font-size: x-large;
+                        color: red
+                      }
+
+      </style>
+
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+      <script>
+        clientSideList = [];
+
+
+        function showResult( response_body ) {
+          $(".answer").text( response_body.message );
+          //$(".selector").val("");
+          //$(".selector2").val("");
+
+        }
+
+
+        var main = function (){
+
+
+              $("button.submit").on("click", function (event){
+                  //$.getJSON( "voter", {"target": $(".selector").val()},  showResult)})
+                    $.post("voter", {"target": $(".selector").val()},  showResult)})
+
+              $(".selector").on("keypress", function (event){
+                  if( event.keyCode == 13){ $.post("voter", {"target": $(".selector").val()},  showResult)}})
+
+              $("button.submit2").on("click", function (event){
+                  //$.getJSON( "voter", {"target": $(".selector").val()},  showResult)})
+                    $.post("length", {"target": $(".selector2").val()},  showResult)})
+
+              $("button.submit3").on("click", function (event){
+                  //$.getJSON( "voter", {"target": $(".selector").val()},  showResult)})
+                    $.post("finalists", {},  showResult)})
+
+          }
+
+          $(document).ready(main);
+      </script>
+  </head>
+
+  <body>
+
+    <h1>Fabulous Pet Name Recorder</h1>
+
+     <section class="name-input">
+        <span class="directions">Write a name for my dog: </span>
+        <input class="selector" type= "text">
+        <button class="submit">Submit</button>
+    </section>
+
+    <section class="length-input">
+        <span class="directions">Specify a length: </span>
+        <input class="selector2" type= "text">
+        <button class="submit2">Submit</button>
+        <button class="submit3">Show Finalists</button>
+    </section>
+
+    <section class="result">
+        <h2>What I found: <span class=answer></span></h2>
+    </section>
+
+  </body>
+</html>
