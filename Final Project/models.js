@@ -14,7 +14,7 @@ var UserModel = { name : null,
 						if(this[field] === undefined ) {console.error("Field error" + field); return;}
 						return this[field];},
 					set : function( field, value ){
-						if(this[field] === undefined ) {console.error("Field error" + field); return;}
+						if(this[field] === undefined  || ) {console.error("Field error" + field); return;}
 						this[field] = value;
 					},
 					append : function( field, value ){
@@ -25,7 +25,7 @@ var UserModel = { name : null,
 						var all_keys = Object.keys( this );
 						var model = this;
 						return all_keys.reduce( function (obj, current) {
-							if( model[current] typeof 'function') { return obj;}
+							if(typeof model[current] === "function") { return obj;}
 							obj[current] = model[current];
 							return obj;
 

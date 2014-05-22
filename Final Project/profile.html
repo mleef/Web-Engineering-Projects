@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+
+  <head>
+
+      <style>
+
+          .undergrad  {
+                        font-size: x-large;
+                        color: red
+                      }
+          .gre  {
+                        font-size: x-large;
+                        color: red
+                      }
+
+      </style>
+
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+      <script>
+
+       function handleRetrieveResult(resp_body) {
+                              console.log( resp_body );
+                              var food = resp_body.food;
+                              $("#food").val( food );
+                          };
+
+       function handleSaveResult(resp_body) {
+                      console.log( resp_body );
+                      var food = resp_body.food;
+                      $("#feedback").text( JSON.stringify( resp_body) );
+                  };
+
+        var main = function (){
+
+              //relying on cookie to keep user name below
+
+              $("button#save").on("click", function (event){ 
+                    $.post("save.json",
+                           {"food": $("#food").val()},
+                           handleSaveResult);
+               });
+
+               $("button#retrieve").on("click", function (event){ 
+                    $.get("retrieve.json",
+                           {},
+                           handleRetrieveResult);
+               });
+
+        }
+        $(document).ready(main);
+      </script>
+  </head>
+
+  <body>
+
+    <h1>Profile Saver</h1>
+
+     <section id="profile">
+        <span class="undergrad">Undergraduate Information: </span>
+          <p>
+          Institution: <input id="school" type="text">
+          <p>
+          Major: <input id="major" type="text">
+          <p>
+          Minor: <input id="minor" type="text">
+          <p>
+          GPA: <input id="gpa" type="text">
+          <p>
+          Extracurriculars: <input id="extra" type="text">
+          <p>
+        <span class="gre">GRE Score: </span>
+          <p>
+          Verbal: <input id="verbal" type="text">
+          <p>
+          Quantitative: <input id="quantitative" type="text">
+          <p>
+          Written: <input id="written" type="text">
+          <p>
+
+        <span class="gre">Work/Research Experience: </span>
+          <p>
+            <form>
+            <input type="radio" name="experience" value="1">Weak<br>
+            <input type="radio" name="experience" value="2">Medium<br>
+            <input type="radio" name="experience" value="3">Strong<br>
+
+            </form>
+          <p>
+
+
+
+        <button id="save">Save user profile</button>
+        <p>
+        <button id="retrieve">Retrieve user profile</button>
+    </section>
+    
+    <section id="result">
+        <h2>Feedback: <span id="feedback"></span></h2>
+    </section>
+
+  </body>
+</html>
