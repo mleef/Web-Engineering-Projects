@@ -17,39 +17,12 @@
       </style>
 
       <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-
+      <script src="./matcher_controller.js"></script>
+      <script src="./models.js"></script>
+      
       <script>
-
-       function handleRetrieveResult(resp_body) {
-                              console.log( resp_body );
-                              var food = resp_body.food;
-                              $("#food").val( food );
-                          };
-
-       function handleSaveResult(resp_body) {
-                      console.log( resp_body );
-                      var food = resp_body.food;
-                      $("#feedback").text( JSON.stringify( resp_body) );
-                  };
-
-        var main = function (){
-
-              //relying on cookie to keep user name below
-
-              $("button#save").on("click", function (event){ 
-                    $.post("save.json",
-                           {"food": $("#food").val()},
-                           handleSaveResult);
-               });
-
-               $("button#retrieve").on("click", function (event){ 
-                    $.get("retrieve.json",
-                           {},
-                           handleRetrieveResult);
-               });
-
-        }
         $(document).ready(main);
+
       </script>
   </head>
 

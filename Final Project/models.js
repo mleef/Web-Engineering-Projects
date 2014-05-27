@@ -14,7 +14,7 @@ var UserModel = { name : null,
 						if(this[field] === undefined ) {console.error("Field error" + field); return;}
 						return this[field];},
 					set : function( field, value ){
-						if(this[field] === undefined  || ) {console.error("Field error" + field); return;}
+						if(this[field] === undefined ) {console.error("Field error" + field); return;}
 						this[field] = value;
 					},
 					append : function( field, value ){
