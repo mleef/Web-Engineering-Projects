@@ -1,0 +1,272 @@
+<!doctype html>
+<html>
+
+  <head>
+
+      <style>
+
+          .directions {
+                        font-size: x-large;
+                        color: red
+                      }
+
+      </style>
+      <script src="./models.js"></script>
+      <script src="./matcher_controller.js"></script>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script>
+        
+        $(document).ready(main);
+
+      </script>
+  </head>
+
+  <body>
+
+    <h1>Profile Saver</h1>
+
+     <section id="profile">
+        <span class="directions">Your current profile: </span>
+        <!--
+        Should have name in cookie - do not need to input it
+        <p>
+        <input id="name" type="text"> <span class="inputlabel">: Name</span>
+        -->
+        <p>
+        <span class="inputlabel">Undergraduate GPA: </span><input id="gpa" type="text"> 
+        <p>
+        <span class="inputlabel">GRE Score (Verbal, Quantitative, Written): </span><input id="verbal" type="text"><input id="quantitative" type="text"><input id="written" type="text">
+        <p>
+        <span class="inputlabel">Program: </span>
+        <select id = "program">
+          <option value="" disabled="disabled" selected="selected">Please select a program</option>
+          <option value="MS">MS</option>
+          <option value="MBA">MBA</option>
+          <option value="MFA">MFA</option>
+          <option value="PhD">PhD</option>
+        </select>
+        <p>
+        <span class="inputlabel">Subject: </span>
+        <select id = "subject">
+          <option value="" disabled="disabled" selected="selected">Please select a subject</option>
+          <option value = "Accountancy"> Accountancy</option>
+
+          <option value = "Administration"> Administration</option>
+
+          <option value = "Adult Education"> Adult Education</option>
+
+          <option value = "Advanced Study"> Advanced Study</option>
+
+          <option value = "Applied Anthropology"> Applied Anthropology</option>
+
+          <option value = "Applied Politics"> Applied Politics</option>
+
+          <option value = "Applied Sciences"> Applied Sciences</option>
+
+          <option value = "Architecture"> Architecture</option>
+
+          <option value = "Archival Studies"> Archival Studies</option>
+
+          <option value = "Christian Education"> Christian Education</option>
+
+          <option value = "City and Regional Planning"> City and Regional Planning</option>
+
+          <option value = "Clinical Medical Science"> Clinical Medical Science</option>
+
+          <option value = "Communication"> Communication</option>
+
+          <option value = "Computer Science"> Computer Science</option>
+
+          <option value = "Criminal Justice"> Criminal Justice</option>
+
+          <option value = "Cross-Cultural and International Education"> Cross-Cultural and International Education</option>
+
+          <option value = "Dentistry"> Dentistry</option>
+
+          <option value = "Digital Media"> Digital Media</option>
+
+          <option value = "Dispute Resolution"> Dispute Resolution</option>
+
+          <option value = "Divinity"> Divinity</option>
+
+          <option value = "Education"> Education</option>
+
+          <option value = "Educational Technology"> Educational Technology</option>
+
+          <option value = "Electronic Business Technologies"> Electronic Business Technologies</option>
+
+          <option value = "Engineering"> Engineering</option>
+
+          <option value = "Environment"> Environment</option>
+
+          <option value = "Environmental Design"> Environmental Design</option>
+
+          <option value = "Environmental Management"> Environmental Management</option>
+
+          <option value = "Environmental Science"> Environmental Science</option>
+
+          <option value = "Environmental Studies"> Environmental Studies</option>
+
+          <option value = "Finance"> Finance</option>
+
+          <option value = "Fine Arts"> Fine Arts</option>
+
+          <option value = "Forensic Science and Law"> Forensic Science and Law</option>
+
+          <option value = "Forensic Sciences"> Forensic Sciences</option>
+
+          <option value = "Forestry"> Forestry</option>
+
+          <option value = "Global Affairs"> Global Affairs</option>
+
+          <option value = "Health Administration"> Health Administration</option>
+
+          <option value = "Health Science"> Health Science</option>
+
+          <option value = "Historic Preservation"> Historic Preservation</option>
+
+          <option value = "Historic Preservation"> Historic Preservation</option>
+
+          <option value = "History"> History</option>
+
+          <option value = "Humanities"> Humanities</option>
+
+          <option value = "Industrial and Labor Relations"> Industrial and Labor Relations</option>
+
+          <option value = "Industrial Design"> Industrial Design</option>
+
+          <option value = "Information"> Information</option>
+
+          <option value = "Information Management"> Information Management</option>
+
+          <option value = "Information Systems"> Information Systems</option>
+
+          <option value = "Information Technology"> Information Technology</option>
+
+          <option value = "Interactive Media"> Interactive Media</option>
+
+          <option value = "International Business"> International Business</option>
+
+          <option value = "International Development"> International Development</option>
+
+          <option value = "International Economics and Finance"> International Economics and Finance</option>
+
+          <option value = "International Hotel Management"> International Hotel Management</option>
+
+          <option value = "Internet Technology"> Internet Technology</option>
+
+          <option value = "Jurisprudence"> Jurisprudence</option>
+
+          <option value = "Landscape Architecture"> Landscape Architecture</option>
+
+          <option value = "Laws"> Laws</option>
+
+          <option value = "Leadership"> Leadership</option>
+
+          <option value = "Liberal Studies"> Liberal Studies</option>
+
+          <option value = "Library Science"> Library Science</option>
+
+          <option value = "Logistics, Trade, and Transportation"> Logistics, Trade, and Transportation</option>
+
+          <option value = "Management"> Management</option>
+
+          <option value = "Management in the Network Economy"> Management in the Network Economy</option>
+
+          <option value = "Mathematics"> Mathematics</option>
+
+          <option value = "Marketing and Communication"> Marketing and Communication</option>
+
+          <option value = "Marketing Research"> Marketing Research</option>
+
+          <option value = "Mass Communication"> Mass Communication</option>
+
+          <option value = "Medical Education"> Medical Education</option>
+
+          <option value = "Medical Science"> Medical Science</option>
+
+          <option value = "Ministry"> Ministry</option>
+
+          <option value = "Music"> Music</option>
+
+          <option value = "Music Education"> Music Education</option>
+
+          <option value = "Natural Sciences"> Natural Sciences</option>
+
+          <option value = "Nonprofit Management"> Nonprofit Management</option>
+
+          <option value = "Nonprofit Organizations"> Nonprofit Organizations</option>
+
+          <option value = "Nurse Anesthesia"> Nurse Anesthesia</option>
+
+          <option value = "Nursing"> Nursing</option>
+
+          <option value = "Occupational Therapy"> Occupational Therapy</option>
+
+          <option value = "Organizational Leadership"> Organizational Leadership</option>
+
+          <option value = "Pacific International Affairs"> Pacific International Affairs</option>
+
+          <option value = "Pharmacy"> Pharmacy</option>
+
+          <option value = "Philosophy"> Philosophy</option>
+
+          <option value = "Physician Assistant Studies"> Physician Assistant Studies</option>
+
+          <option value = "Professional Counseling"> Professional Counseling</option>
+
+          <option value = "Professional Studies"> Professional Studies</option>
+
+          <option value = "Professional Writing"> Professional Writing</option>
+
+          <option value = "Project Management"> Project Management</option>
+
+          <option value = "Public Administration"> Public Administration</option>
+
+          <option value = "Public Health"> Public Health</option>
+
+          <option value = "Public Management"> Public Management</option>
+
+          <option value = "Public Policy"> Public Policy</option>
+
+          <option value = "Public Service"> Public Service</option>
+
+          <option value = "Quality Assurance"> Quality Assurance</option>
+
+          <option value = "Resource Management"> Resource Management</option>
+
+          <option value = "Sacred Music"> Sacred Music</option>
+
+          <option value = "Security Technologies"> Security Technologies</option>
+
+          <option value = "Social Work"> Social Work</option>
+
+          <option value = "Strategic Leadership"> Strategic Leadership</option>
+
+          <option value = "Taxation"> Taxation</option>
+
+          <option value = "Teaching"> Teaching</option>
+
+          <option value = "Theology"> Theology</option>
+
+          <option value = "Urban Planning"> Urban Planning</option>
+
+          <option value = "Urban Studies"> Urban Studies</option>
+        </select>
+        <p>
+        
+        
+        <button id="modify">Save user profile</button>
+        <p>
+        <button id="match">Match</button>
+        
+    </section>
+    
+    <section id="result">
+        <h2>Feedback: <span id="feedback"></span></h2>
+    </section>
+
+  </body>
+</html>
+
+

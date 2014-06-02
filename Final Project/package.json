@@ -1,0 +1,10 @@
+{
+        "name": "Foody2",
+        "description": "Use mongo for demo",
+        "version": "0.0.1",
+        "dependencies": {
+            "mongoose": "3.6.x",
+            "express": "3.4.x",
+            "connect": "*"
+        }
+}
