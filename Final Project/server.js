@@ -1,9 +1,11 @@
 
 var express = require("express"),
     http = require("http"),
+    https = require("https"),
     connect = require("connect"),  //npm install connect
     login_handlers = require("./login_routes.js"),
     port = process.env.PORT || 3000,  //this is new
+    fs = require("fs"),
     app = express();
 
 var cookie_options = {};  //{ 'httpOnly': true, 'signed': true };
@@ -21,6 +23,13 @@ app.use( function( req, res, next) {
 
 })
 
+
+var options = {
+    key: fs.readFileSync("ssl/server.key"),
+    cert: fs.readFileSync("ssl/server.crt")
+}
+
+//https.createServer(options, app).listen(port);
 http.createServer(app).listen(port);
 console.log("Express is listening on port " + port);
 

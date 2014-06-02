@@ -39,4 +39,4 @@ module.exports = {
            "saveProfileHandler": saveProfileHandler,
            "matchProfileHandler": matchHandler,
            "reloadgs": reloadgsHandler
-                };
+};

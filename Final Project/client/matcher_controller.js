@@ -45,7 +45,16 @@ function handleRetrieveResult(resp_body) {
 
 function handleSaveResult(resp_body) {
   console.log( resp_body );
+  alert("Profile Saved Successfully! This feedback will be cooler soon.");
 };
+
+function handleLoginResult(resp_body) {
+  console.log( resp_body );
+  $("#feedback").text( JSON.stringify( resp_body) );
+  sessionStorage.setItem("name", resp_body.user);
+  if( resp_body.url ) window.location = resp_body.url; //load main app page
+};
+
 
 
 
@@ -132,7 +141,15 @@ var main = function (){
           
     });
 
+    $("button#match").on("click", function (event){ 
+         window.location = "matcher.html";
+    })
 
+    $("button#matcher").on("click", function (event){ 
+         $.get("retrieve.json", {}, handleRetrieveResult);
+    })
+
+    
 
 
 }

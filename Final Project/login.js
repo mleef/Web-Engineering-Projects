@@ -1,5 +1,5 @@
 
-var mongoose = require("mongoose"),
+var mongoose = require("mongoose"), bcrypt = require("bcrypt"),
     mongoUrl;
 
 if (process.env.VCAP_SERVICES) {
@@ -87,7 +87,8 @@ function mongoCheckExistence( login, callBack ){
                    return;
                 }
                 if( result ){
-                   if( result.password === pass )
+                    //compare stored hash to hash of inputted password
+                   if( bcrypt.compareSync(pass, result.password))
                       callBack({"name": true, "password": true});  //both matched
                     else
                       callBack({"name": true, "password": false}); //only name matched
@@ -110,7 +111,10 @@ function mongoRegister( login, callBack ){
                            callBack({"saved": false});  //exists so was not saved
                       } else {
                            //Big thing to note - we are not waiting for save result before calling back to client
-                           var user = new User( {"user": login.name, password: login.password,
+                           var pass = login.password;
+                           //hash the password and store the hash
+                           var hash = bcrypt.hashSync(pass, 10);
+                           var user = new User( {"user": login.name, password: hash,
                                                   "history": [], "compromised": [] });
                            user.save(function (err, doc){ 
                              console.log( "register result: " + JSON.stringify( err ) + " & " + JSON.stringify( doc));
